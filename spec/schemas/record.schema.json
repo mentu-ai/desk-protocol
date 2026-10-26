@@ -1,0 +1,492 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "record.schema.json",
+ "title": "Desk record, spec 0.2",
+ "description": "One line of a desk log (spec/SPEC.md §4, §5). Normative: a line that fails this schema is `invalid` (R4). Unknown top-level fields are allowed and preserved (R11); unknown operations are allowed here and ignored by readers, while tools refuse to write them (§5). Readers additionally reject timestamps that do not denote a real instant, a `from` that differs from the log directory, and the cross-record rules of R18.",
+ "type": "object",
+ "required": [
+  "v",
+  "seq",
+  "ts",
+  "from",
+  "op"
+ ],
+ "properties": {
+  "v": {
+   "type": "string",
+   "pattern": "^0\\.(0|[1-9][0-9]*)$"
+  },
+  "seq": {
+   "type": "integer",
+   "minimum": 1,
+   "maximum": 9007199254740991
+  },
+  "ts": {
+   "$ref": "#/$defs/ts"
+  },
+  "from": {
+   "$ref": "#/$defs/identity"
+  },
+  "op": {
+   "type": "string",
+   "pattern": "^[a-z][a-z0-9_]{0,31}$"
+  },
+  "to": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/identity"
+    },
+    {
+     "$ref": "#/$defs/role"
+    },
+    {
+     "const": "*"
+    }
+   ]
+  },
+  "re": {
+   "$ref": "#/$defs/ref"
+  },
+  "text": {
+   "type": "string",
+   "minLength": 1
+  },
+  "settle": {
+   "type": "string",
+   "minLength": 1
+  },
+  "by": {
+   "$ref": "#/$defs/time"
+  },
+  "lease_duration_seconds": {
+   "type": "integer",
+   "minimum": 1,
+   "maximum": 9007199254740991
+  },
+  "evidence": {
+   "type": "array",
+   "items": {
+    "$ref": "#/$defs/evidence"
+   }
+  },
+  "result": {
+   "enum": [
+    "established",
+    "refuted",
+    "unknown"
+   ]
+  },
+  "reason": {
+   "type": "string",
+   "minLength": 1
+  },
+  "outcome": {
+   "enum": [
+    "accepted",
+    "withdrawn",
+    "superseded"
+   ]
+  },
+  "state": {
+   "$ref": "#/$defs/state"
+  },
+  "supersedes": {
+   "$ref": "#/$defs/ref"
+  },
+  "on_behalf_of": {
+   "$ref": "#/$defs/human"
+  },
+  "prev": {
+   "$ref": "#/$defs/digest"
+  },
+  "ext": {
+   "type": "object",
+   "propertyNames": {
+    "pattern": "^[a-z0-9-]+(\\.[a-z0-9_-]+)+$"
+   }
+  },
+  "sig": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9+/]+={0,2}$"
+  }
+ },
+ "additionalProperties": true,
+ "dependentRequired": {
+  "supersedes": [
+   "reason"
+  ]
+ },
+ "allOf": [
+  {
+   "if": {
+    "required": [
+     "op"
+    ],
+    "properties": {
+     "op": {
+      "const": "ask"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "text",
+     "settle"
+    ]
+   }
+  },
+  {
+   "if": {
+    "required": [
+     "op"
+    ],
+    "properties": {
+     "op": {
+      "const": "claim"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "re"
+    ]
+   }
+  },
+  {
+   "if": {
+    "required": [
+     "op"
+    ],
+    "properties": {
+     "op": {
+      "const": "release"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "re",
+     "reason"
+    ]
+   }
+  },
+  {
+   "if": {
+    "required": [
+     "op"
+    ],
+    "properties": {
+     "op": {
+      "const": "report"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "re",
+     "text"
+    ]
+   }
+  },
+  {
+   "if": {
+    "required": [
+     "op"
+    ],
+    "properties": {
+     "op": {
+      "const": "verify"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "re",
+     "result"
+    ]
+   }
+  },
+  {
+   "if": {
+    "required": [
+     "op",
+     "result"
+    ],
+    "properties": {
+     "op": {
+      "const": "verify"
+     },
+     "result": {
+      "enum": [
+       "refuted",
+       "unknown"
+      ]
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "reason"
+    ]
+   }
+  },
+  {
+   "if": {
+    "required": [
+     "op"
+    ],
+    "properties": {
+     "op": {
+      "const": "close"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "re",
+     "outcome"
+    ]
+   }
+  },
+  {
+   "if": {
+    "required": [
+     "op",
+     "outcome"
+    ],
+    "properties": {
+     "op": {
+      "const": "close"
+     },
+     "outcome": {
+      "enum": [
+       "withdrawn",
+       "superseded"
+      ]
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "reason"
+    ]
+   }
+  },
+  {
+   "if": {
+    "required": [
+     "op"
+    ],
+    "properties": {
+     "op": {
+      "const": "checkpoint"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "state"
+    ]
+   }
+  }
+ ],
+ "$defs": {
+  "identity": {
+   "type": "string",
+   "pattern": "^(human|agent|system):(?=[a-z0-9._+@-]{3,64}$)[a-z0-9][a-z0-9._+-]*@[a-z0-9][a-z0-9._+-]*$"
+  },
+  "human": {
+   "type": "string",
+   "pattern": "^human:(?=[a-z0-9._+@-]{3,64}$)[a-z0-9][a-z0-9._+-]*@[a-z0-9][a-z0-9._+-]*$"
+  },
+  "role": {
+   "type": "string",
+   "pattern": "^role:[a-z0-9][a-z0-9._-]{0,63}$"
+  },
+  "ref": {
+   "type": "string",
+   "pattern": "^(human|agent|system):(?=[a-z0-9._+@-]{3,64}#)[a-z0-9][a-z0-9._+-]*@[a-z0-9][a-z0-9._+-]*#[1-9][0-9]{0,15}$"
+  },
+  "digest": {
+   "type": "string",
+   "pattern": "^sha256:[0-9a-f]{64}$"
+  },
+  "ts": {
+   "type": "string",
+   "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$"
+  },
+  "time": {
+   "type": "string",
+   "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]{1,9})?Z$"
+  },
+  "evidence": {
+   "type": "object",
+   "required": [
+    "kind",
+    "ref"
+   ],
+   "properties": {
+    "kind": {
+     "enum": [
+      "file",
+      "url",
+      "command",
+      "commit",
+      "record",
+      "event",
+      "blob",
+      "note"
+     ]
+    },
+    "ref": {
+     "type": "string",
+     "minLength": 1
+    },
+    "digest": {
+     "$ref": "#/$defs/digest"
+    },
+    "observed_at": {
+     "$ref": "#/$defs/time"
+    }
+   },
+   "additionalProperties": true,
+   "allOf": [
+    {
+     "if": {
+      "required": [
+       "kind"
+      ],
+      "properties": {
+       "kind": {
+        "const": "record"
+       }
+      }
+     },
+     "then": {
+      "properties": {
+       "ref": {
+        "$ref": "#/$defs/ref"
+       }
+      }
+     }
+    },
+    {
+     "if": {
+      "required": [
+       "kind"
+      ],
+      "properties": {
+       "kind": {
+        "const": "blob"
+       }
+      }
+     },
+     "then": {
+      "properties": {
+       "ref": {
+        "$ref": "#/$defs/digest"
+       }
+      }
+     }
+    },
+    {
+     "if": {
+      "required": [
+       "kind"
+      ],
+      "properties": {
+       "kind": {
+        "const": "event"
+       }
+      }
+     },
+     "then": {
+      "properties": {
+       "ref": {
+        "type": "string",
+        "pattern": "^[^#\\s]+#[^#\\s]+$"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "state": {
+   "type": "object",
+   "properties": {
+    "established": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1
+     }
+    },
+    "unknown": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "required": [
+       "what",
+       "reason"
+      ],
+      "properties": {
+       "what": {
+        "type": "string",
+        "minLength": 1
+       },
+       "reason": {
+        "type": "string",
+        "minLength": 1
+       },
+       "settle": {
+        "type": "string",
+        "minLength": 1
+       }
+      },
+      "additionalProperties": true
+     }
+    },
+    "next": {
+     "type": "string"
+    },
+    "blocked_on": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1
+     }
+    },
+    "heartbeat_seconds": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 9007199254740991
+    },
+    "seen": {
+     "type": "object",
+     "propertyNames": {
+      "pattern": "^(human|agent|system):(?=[a-z0-9._+@-]{3,64}$)[a-z0-9][a-z0-9._+-]*@[a-z0-9][a-z0-9._+-]*$"
+     },
+     "additionalProperties": {
+      "type": "object",
+      "required": [
+       "seq",
+       "digest"
+      ],
+      "properties": {
+       "seq": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 9007199254740991
+       },
+       "digest": {
+        "$ref": "#/$defs/digest"
+       }
+      },
+      "additionalProperties": true
+     }
+    }
+   },
+   "additionalProperties": true
+  }
+ }
+}

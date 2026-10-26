@@ -1,0 +1,122 @@
+{
+ "status": "draft",
+ "note": "Holds exactly the words of Appendix R of PROMPT-desk-protocol-v0.2.md until the family registry is published (owner decision 3). Replace with a pinned registry version once it exists.",
+ "source": {
+  "document": "docs/intent/PROMPT-desk-protocol-v0.2.md",
+  "sha256": "a304c6b360e6f25f90e5bb34fe8d41a06bf4f28699ecd20381a7c92472762c7d",
+  "section": "Appendix R"
+ },
+ "charter": [
+  "Nothing is edited or deleted.",
+  "State is computed.",
+  "State says what it does not know.",
+  "A claim is not a check.",
+  "Closing needs evidence, and \"done\" needs someone else's check.",
+  "Nothing is dropped silently.",
+  "Order comes from sequence within one writer.",
+  "A reader moves its position only after handling.",
+  "Authority comes from the reader's policy.",
+  "No model in the core.",
+  "Vocabularies are closed.",
+  "Adopt before inventing; the spec is the product."
+ ],
+ "actors": {
+  "grammar": "kind:name[@scope]",
+  "kinds": [
+   "human",
+   "agent",
+   "system",
+   "webhook",
+   "probe"
+  ],
+  "desk_treats_as_system": [
+   "webhook",
+   "probe"
+  ],
+  "aliases": {
+   "user": "human",
+   "hook": "webhook"
+  },
+  "bare_email": "a@b.c means human:a@b.c",
+  "case": "lowercase"
+ },
+ "references": {
+  "canonical": "{source, id} with an optional digest",
+  "string_form": "<source>#<id>",
+  "sources": [
+   "desk:<desk-id>/<kind>/<name>@<scope>",
+   "monitor:<id>",
+   "ledger:<workspace>"
+  ],
+  "digest_form": "sha256:<hex>"
+ },
+ "outcomes": [
+  "established",
+  "refuted",
+  "unknown"
+ ],
+ "outcome_rules": [
+  "unknown carries a reason"
+ ],
+ "levels": [
+  "unverified",
+  "reported",
+  "machine_verified",
+  "human_verified"
+ ],
+ "ceilings": {
+  "agent": "unverified",
+  "system": "machine_verified",
+  "webhook": "machine_verified",
+  "probe": "machine_verified",
+  "human": "human_verified"
+ },
+ "level_rules": [
+  "A level rises only through a new record by a higher observer.",
+  "A refutation never lowers a level.",
+  "Commitment partially_verified reads as machine_verified for the checks that ran, plus unknown for the check that did not.",
+  "Monitor certified keeps that protocol's meaning (it needs a person behind it) until the owner decides otherwise."
+ ],
+ "desk_flags": [
+  "invalid",
+  "gap",
+  "duplicate",
+  "rewritten",
+  "chain_broken",
+  "unchained",
+  "unresolved",
+  "contested",
+  "expired",
+  "silent",
+  "unverified_close",
+  "unpermitted"
+ ],
+ "shared_gaps": [
+  "unattested_origin",
+  "single_actor",
+  "independence_unknown",
+  "stale_source"
+ ],
+ "conformance_report": {
+  "columns": [
+   "check id",
+   "rule",
+   "result"
+  ],
+  "results": [
+   "PASS",
+   "FAIL",
+   "SKIP"
+  ],
+  "skip_requires": "a reason",
+  "header": [
+   "date",
+   "suite version",
+   "commit tested"
+  ]
+ },
+ "shared_gap_notes": {
+  "unattested_origin": "no signing",
+  "stale_source": "the Monitor word closest to silent"
+ }
+}

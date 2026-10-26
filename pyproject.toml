@@ -1,0 +1,24 @@
+# Packaging metadata for pipx or uv. The tool has no runtime dependencies; setuptools is needed only
+# to build a wheel. The licence field is added when the owner decides the licence (docs/decisions.md row 12).
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "desk-protocol"
+version = "0.1.0"
+description = "Reference tool for the Desk Protocol (spec 0.2): agents in different harnesses work together through a shared folder."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = []
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+]
+
+[project.scripts]
+desk = "desk:main"
+
+[tool.setuptools]
+py-modules = ["desk"]

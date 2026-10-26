@@ -1,0 +1,84 @@
+D01 PASS closed/accepted, independent established verify, five agent records unverified
+D02 PASS printf ask and checkpoint with a shell-computed prev: validate verified (exit 0)
+D03 PASS 1000 records, 44 kills, 1029 deliveries (14 redeliveries of unhandled records), none lost, each handled once
+D04 PASS the partial line waited, then was read once complete
+D05 PASS invalid with raw bytes shown; the next record flowed
+D06 PASS gap 2 and duplicate 3 reported for the writer
+D07 PASS exit 4 while locked; append as another writer exit 3; spoofed line invalid
+D08 PASS contested with the earlier claim as holder; a tie on ts breaks by from
+D09 PASS held at exactly renew_time + 60 s, expired 1 ms later; renewal moved the expiry
+D10 PASS tool refused (exit 3); raw close flagged unverified_close, ask not closed
+D11 PASS self-verify not independent; accepted close refused
+D12 PASS unknown needs a reason; the ask stays unclosed
+D13 PASS expired at deadline + 1 s, not at deadline - 1 s
+D14 PASS silent at 61 s, not at 59 s
+D15 PASS one thread with the new text; the original stays in the log
+D16 PASS unknown field preserved; unknown operation ignored and counted
+D17 PASS no canary after 16 read commands; no raw escape bytes in output
+D18 PASS oversized refused; a likely secret warned, then refused under secrets: refuse
+D19 PASS unsigned and mis-signed invalid; signed accepted; a person's signed verify human_verified
+D20 PASS 100 rounds through git, no merge conflict, merged desk verified with 200 records
+D21 PASS missing file, record and verify each unresolved; ask not closed
+D22 PASS symlinked directory and segment invalid and unread; write through a link exit 5
+D23 PASS in-place edit and truncation reported rewritten on every read until seek
+D24 PASS chain_broken; unchained under warn; refused and failed under required; the tool always chains
+D25 PASS re-forged chain checks, and the verify's digest reports the report rewritten
+D26 PASS a rewrite of an uncited head listed in seen is rewritten, witnessed by the checkpoint
+D27 PASS next delivery #4; skipping ack refused; re-ack a no-op
+D28 PASS 11 of 11 events valid against observation.json at ? with its own validator (src/schema.ts); ceilings hold
+D29 PASS 8 malformed identities exit 64; user: alias normalized; no colon in any path
+D30 PASS tool refused (exit 3); raw supersede without a reason invalid, state unchanged
+D31 PASS on_behalf_of never raised an agent's level, signed or not; both identities shown
+D32 PASS agent close refused (exit 3) and raw one unpermitted; a lead's close closes
+D33 PASS verified 0 / incomplete 2 / failed 1 under both profiles, with counts
+D34 PASS 7 rows (capture, commit, claim, capture, submit, annotate, approve): verifier at 7ef5050 says verified (exit 0); keys unique; second bridge added 0
+D35 PASS show, status, validate, stats and export accept --as
+D36 PASS addressed, role, cites-mine, thread and open asks listed; the rest counted, then cleared by ack --upto
+D38 PASS waiting written on the desk, then acknowledged: not re-delivered, listed as waiting until closed, its thread followed
+D37 PASS 12 flags, 4 levels, 2 outcomes, 3 gaps seen, all in the registry
+
+Desk Protocol conformance report
+date 2026-10-24T16:06:03Z | suite 0.2.0 | implementation python3 /Users/rashid/Desktop/epistemics/desks/desk-protocol-0.2.0-release/desk.py | commit 591de25d+uncommitted | python 3.14.6 | darwin
+
+| Check | Rule | Result | Detail |
+|---|---|---|---|
+| D01 | §5, R8, §7.2 | PASS | closed/accepted, independent established verify, five agent records unverified |
+| D02 | P9, R16 | PASS | printf ask and checkpoint with a shell-computed prev: validate verified (exit 0) |
+| D03 | R7 | PASS | 1000 records, 44 kills, 1029 deliveries (14 redeliveries of unhandled records), none lost, each handled once |
+| D04 | R4 | PASS | the partial line waited, then was read once complete |
+| D05 | R4, P14 | PASS | invalid with raw bytes shown; the next record flowed |
+| D06 | R5 | PASS | gap 2 and duplicate 3 reported for the writer |
+| D07 | R2 | PASS | exit 4 while locked; append as another writer exit 3; spoofed line invalid |
+| D08 | R9 | PASS | contested with the earlier claim as holder; a tie on ts breaks by from |
+| D09 | R9 | PASS | held at exactly renew_time + 60 s, expired 1 ms later; renewal moved the expiry |
+| D10 | R8 | PASS | tool refused (exit 3); raw close flagged unverified_close, ask not closed |
+| D11 | R8, P7 | PASS | self-verify not independent; accepted close refused |
+| D12 | P8, §5 | PASS | unknown needs a reason; the ask stays unclosed |
+| D13 | R10 | PASS | expired at deadline + 1 s, not at deadline - 1 s |
+| D14 | R10 | PASS | silent at 61 s, not at 59 s |
+| D15 | R18, R1 | PASS | one thread with the new text; the original stays in the log |
+| D16 | R11 | PASS | unknown field preserved; unknown operation ignored and counted |
+| D17 | R6, P4 | PASS | no canary after 16 read commands; no raw escape bytes in output |
+| D18 | R12 | PASS | oversized refused; a likely secret warned, then refused under secrets: refuse |
+| D19 | §9 | PASS | unsigned and mis-signed invalid; signed accepted; a person's signed verify human_verified |
+| D20 | §11, P2 | PASS | 100 rounds through git, no merge conflict, merged desk verified with 200 records |
+| D21 | R17, R14 | PASS | missing file, record and verify each unresolved; ask not closed |
+| D22 | R14 | PASS | symlinked directory and segment invalid and unread; write through a link exit 5 |
+| D23 | R15 | PASS | in-place edit and truncation reported rewritten on every read until seek |
+| D24 | R16 | PASS | chain_broken; unchained under warn; refused and failed under required; the tool always chains |
+| D25 | R17 | PASS | re-forged chain checks, and the verify's digest reports the report rewritten |
+| D26 | R17 | PASS | a rewrite of an uncited head listed in seen is rewritten, witnessed by the checkpoint |
+| D27 | R7 | PASS | next delivery #4; skipping ack refused; re-ack a no-op |
+| D28 | §12 | PASS | 11 of 11 events valid against observation.json at ? with its own validator (src/schema.ts); ceilings hold |
+| D29 | §3 | PASS | 8 malformed identities exit 64; user: alias normalized; no colon in any path |
+| D30 | R18 | PASS | tool refused (exit 3); raw supersede without a reason invalid, state unchanged |
+| D31 | R19, R20 | PASS | on_behalf_of never raised an agent's level, signed or not; both identities shown |
+| D32 | R21 | PASS | agent close refused (exit 3) and raw one unpermitted; a lead's close closes |
+| D33 | §7.5 | PASS | verified 0 / incomplete 2 / failed 1 under both profiles, with counts |
+| D34 | §12 | PASS | 7 rows (capture, commit, claim, capture, submit, annotate, approve): verifier at 7ef5050 says verified (exit 0); keys unique; second bridge added 0 |
+| D35 | D35 (CONTEXT §3) | PASS | show, status, validate, stats and export accept --as |
+| D36 | §8, Monitor P12 | PASS | addressed, role, cites-mine, thread and open asks listed; the rest counted, then cleared by ack --upto |
+| D38 | §8 | PASS | waiting written on the desk, then acknowledged: not re-delivered, listed as waiting until closed, its thread followed |
+| D37 | §13 | PASS | 12 flags, 4 levels, 2 outcomes, 3 gaps seen, all in the registry |
+
+summary: 38 PASS, 0 FAIL, 0 SKIP of 38 checks

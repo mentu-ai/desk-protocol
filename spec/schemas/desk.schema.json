@@ -1,0 +1,198 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "desk.schema.json",
+ "title": "desk.json, spec 0.2",
+ "description": "Shared policy and identity of a desk (spec/SPEC.md §10.1). Normative. Closed: an unknown key or policy key makes the desk invalid, because a misspelt policy would otherwise weaken the desk silently. Extensions go under `ext`.",
+ "type": "object",
+ "required": [
+  "id",
+  "spec"
+ ],
+ "additionalProperties": false,
+ "properties": {
+  "id": {
+   "type": "string",
+   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+  },
+  "name": {
+   "type": "string"
+  },
+  "spec": {
+   "type": "string",
+   "pattern": "^0\\.(0|[1-9][0-9]*)$"
+  },
+  "members": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "identity"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "identity": {
+      "type": "string",
+      "pattern": "^(human|agent|system):(?=[a-z0-9._+@-]{3,64}$)[a-z0-9][a-z0-9._+-]*@[a-z0-9][a-z0-9._+-]*$"
+     },
+     "keys": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "pattern": "^(ssh-ed25519|ssh-rsa|ecdsa-sha2-nistp(256|384|521)|sk-ssh-ed25519@openssh\\.com|sk-ecdsa-sha2-nistp256@openssh\\.com) [A-Za-z0-9+/]+={0,3}( [^\\n]*)?$"
+      }
+     },
+     "note": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "policy": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "close_requires_verify": {
+     "type": "boolean",
+     "default": true
+    },
+    "independent_verify": {
+     "type": "boolean",
+     "default": true
+    },
+    "default_lease_seconds": {
+     "type": "integer",
+     "minimum": 1,
+     "default": 900,
+     "maximum": 9007199254740991
+    },
+    "default_deadline_seconds": {
+     "type": "integer",
+     "minimum": 1,
+     "default": 14400,
+     "maximum": 9007199254740991
+    },
+    "heartbeat_seconds": {
+     "type": "integer",
+     "minimum": 1,
+     "default": 600,
+     "maximum": 9007199254740991
+    },
+    "max_record_bytes": {
+     "type": "integer",
+     "minimum": 1024,
+     "default": 16384,
+     "maximum": 9007199254740991
+    },
+    "chain": {
+     "enum": [
+      "off",
+      "warn",
+      "required"
+     ],
+     "default": "warn"
+    },
+    "signing": {
+     "enum": [
+      "off",
+      "warn",
+      "required"
+     ],
+     "default": "off"
+    },
+    "secrets": {
+     "enum": [
+      "off",
+      "warn",
+      "refuse"
+     ],
+     "default": "warn"
+    },
+    "ops": {
+     "type": "array",
+     "items": {
+      "enum": [
+       "ask",
+       "claim",
+       "release",
+       "report",
+       "verify",
+       "close",
+       "checkpoint"
+      ]
+     },
+     "uniqueItems": true,
+     "default": [
+      "ask",
+      "claim",
+      "release",
+      "report",
+      "verify",
+      "close",
+      "checkpoint"
+     ]
+    }
+   }
+  },
+  "roles": {
+   "type": "object",
+   "required": [
+    "actors",
+    "permissions"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "actors": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "required": [
+       "id",
+       "role"
+      ],
+      "additionalProperties": false,
+      "properties": {
+       "id": {
+        "type": "string",
+        "pattern": "^[a-z0-9*:@._+-]{1,80}$"
+       },
+       "role": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+       }
+      }
+     }
+    },
+    "permissions": {
+     "type": "object",
+     "propertyNames": {
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+     },
+     "additionalProperties": {
+      "type": "array",
+      "items": {
+       "enum": [
+        "ask",
+        "claim",
+        "release",
+        "report",
+        "verify",
+        "close",
+        "checkpoint",
+        "*"
+       ]
+      },
+      "uniqueItems": true
+     }
+    }
+   }
+  },
+  "namespace": {
+   "type": "string",
+   "pattern": "^[a-z0-9]+(\\.[a-z0-9_-]+)*$",
+   "default": "desk"
+  },
+  "ext": {
+   "type": "object"
+  }
+ }
+}

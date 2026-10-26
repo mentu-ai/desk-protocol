@@ -1,0 +1,7 @@
+.siblings/
+__pycache__/
+*.pyc
+.local/
+packet/*.zip
+build/
+*.egg-info/
